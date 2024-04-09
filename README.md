@@ -1,1 +1,1 @@
-This is a simple password generator made in Python.
+This is a simple Open-Source password generator made in Python.
