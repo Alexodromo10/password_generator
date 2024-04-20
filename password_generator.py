@@ -10,9 +10,23 @@ customtkinter.set_appearance_mode("dark")
 password = ""
 bg = customtkinter.CTkFrame(master=app)
 bg.pack(expand=True, fill="both")
+
+
 #password generator
 font = customtkinter.CTkFont("Product Sans", size=20)
 logofont= customtkinter.CTkFont("Product Sans Bold", size=40)
+
+# saving passwords
+#------------
+data = 0
+try:
+    data = open("created_passwords", "r").read()
+except FileNotFoundError:
+    data = 0
+    print("No created passwords file exists. Creating a new one . . .")
+    
+data = open("created_passwords", "w")
+#------------
 def optionmenu_callback(choice):
     if choice == "Dark Mode":
         customtkinter.set_appearance_mode("dark")
@@ -34,8 +48,7 @@ logo_label.place(relx=0.5, rely=0.15, anchor="center")
 hey = customtkinter.CTkLabel(text="Hey! You can write ONLY numerical characters", font=font, master=bg)
 
 def open_input_dialog_event():
-    global password
-    global hey
+    global password, hey, data
     try:
         label.place(relx=0.5, rely=2, anchor="center")
         dialog = customtkinter.CTkInputDialog(text="Type the number of characters of your new password", title="Create Password", font=font)
@@ -47,7 +60,7 @@ def open_input_dialog_event():
         label.place(relx=0.5, rely=0.6, anchor="center")
         label.configure(text=password)
         hey.place(relx=0.5, rely=2,anchor="center")
-
+        data.write(password + "\n")
     except ValueError:
         hey.place(relx=0.5, rely=0.6, anchor="center")
         open_input_dialog_event()
@@ -82,6 +95,7 @@ def darken_hex_color(hex_color, factor):
     return dark_hex_color
 
 def color_picker():
+    global theme, color
     pick_color = AskColor()
     color = pick_color.get()
     darkened_color = darken_hex_color(color, 0.3)  # Darken by 50%
@@ -92,7 +106,8 @@ def color_picker():
     string_input_button.configure(fg_color=color, hover_color=darkened_hover_color)
     colortheme.configure(fg_color=color, hover_color=darkened_hover_color)
     bg.configure(fg_color=darkened_color)
-
+    
 colortheme= customtkinter.CTkButton(master=bg, text="Choose theme color", font=font, text_color="white", command=color_picker, corner_radius=30)
 colortheme.place(relx=0.5, rely=0.9, anchor="center")
+
 app.mainloop()
