@@ -31,18 +31,26 @@ label2 = customtkinter.CTkLabel(master=bg, text="Succesfully copied to clipboard
 label2.place(relx=0.5, rely=2, anchor="center")
 logo_label = customtkinter.CTkLabel(master=bg, text="Simple password \ngenerator", font=logofont, fg_color="transparent")
 logo_label.place(relx=0.5, rely=0.15, anchor="center")
+hey = customtkinter.CTkLabel(text="Hey! You can write ONLY numerical characters", font=font, master=bg)
 
 def open_input_dialog_event():
     global password
-    dialog = customtkinter.CTkInputDialog(text="Type the number of characters of your new password", title="Create Password", font=font)
-    password = ""
-    label2.place(relx=0.5, rely=2, anchor="center")
+    global hey
+    try:
+        label.place(relx=0.5, rely=2, anchor="center")
+        dialog = customtkinter.CTkInputDialog(text="Type the number of characters of your new password", title="Create Password", font=font)
+        password = ""
+        label2.place(relx=0.5, rely=2, anchor="center")
+        for i in range(int(dialog.get_input())):
+            password += random.choice(chars)
 
-    for i in range(int(dialog.get_input())):
-        password += random.choice(chars)
+        label.place(relx=0.5, rely=0.6, anchor="center")
+        label.configure(text=password)
+        hey.place(relx=0.5, rely=2,anchor="center")
 
-    label.place(relx=0.5, rely=0.6, anchor="center")
-    label.configure(text=password)
+    except ValueError:
+        hey.place(relx=0.5, rely=0.6, anchor="center")
+        open_input_dialog_event()
 
 def click_handler():
     app.clipboard_clear()
